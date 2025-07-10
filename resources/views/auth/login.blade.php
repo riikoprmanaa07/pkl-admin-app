@@ -37,7 +37,7 @@
 <body>
     <div class="card">
         <h2>Selamat Datang Kembali!</h2>
-        <p class="subtitle">Silakan masuk untuk melanjutkan</p>
+        <p class="subtitle">Masuk untuk melanjutkan ke dasbor Anda.</p>
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="form-group">
