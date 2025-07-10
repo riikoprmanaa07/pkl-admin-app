@@ -106,7 +106,7 @@
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                 const payload = { contents: chatHistory };
                 // PERBAIKAN: API Key dikosongkan agar otomatis diisi oleh sistem Canvas.
-                const apiKey = @json($geminiApiKey); 
+                const apiKey = @json($geminiApiKey); // Kunci API akan disediakan oleh Canvas
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
                 
                 const response = await fetch(apiUrl, {
