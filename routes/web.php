@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WidyaiswaraController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminDashboardController;
 
@@ -30,7 +31,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // 5. Rute Widyaiswara
+    Route::get('/direktori-widyaiswara', [WidyaiswaraController::class, 'index'])->name('widyaiswara.index');
 });
 
-// 5. Rute Autentikasi (dari Breeze)
+// 6. Rute Autentikasi (dari Breeze)
 require __DIR__.'/auth.php';
