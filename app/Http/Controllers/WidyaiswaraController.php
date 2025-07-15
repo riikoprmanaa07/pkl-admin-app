@@ -14,8 +14,8 @@ class WidyaiswaraController extends Controller
         $profiles = [
             [
                 'photo' => 'https://placehold.co/128x128/0056b3/FFFFFF?text=A',
-                'name' => 'Dr. Amelia Hartono, M.Si.',
-                'nip' => '197508151998032001',
+                'name' => '	Dra. MUKAROMAH SYAKOER, M.M.',
+                'nip' => '196102171985032008',
                 'rank' => 'Pembina Utama Madya (IV/d)',
                 'specializations' => ['Kepemimpinan', 'Manajemen Strategis']
             ],

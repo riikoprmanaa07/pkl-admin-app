@@ -66,6 +66,60 @@
       .specialization_tag {
         @apply px-3 py-1 text-xs font-medium rounded-full bg-[var(--secondary-color)] text-[var(--text-secondary)];
       }
+      .user-menu {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .user-menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-menu-button svg {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+                .dropdown-menu {
+            display: none; /* Sembunyi secara default */
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 0.5rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            width: 200px;
+            padding: 0.5rem 0;
+            z-index: 10;
+        }
+        
+        .dropdown-menu.show {
+            display: block;
+        }
+        
+        .dropdown-menu a, .dropdown-menu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            color: var(--secondary-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .dropdown-menu a:hover, .dropdown-menu button:hover {
+            background-color: #f3f4f6; /* Warna latar belakang saat hover */
+        }
     </style>
 </head>
 <body class="bg-[var(--background-color)]">
@@ -79,23 +133,33 @@
                 </a>
                 <nav class="hidden md:flex items-center gap-6">
                     <a href="{{ route('dashboard') }}" class="text-sm font-medium text-gray-500 hover:text-blue-600">Dashboard</a>
-                    <a href="{{ route('widyaiswara.index') }}" class="text-sm font-medium text-gray-500 hover:text-blue-600">Profil Widyaiswara</a>
                     <a href="#" class="text-sm font-medium text-gray-500 hover:text-blue-600">Info Ajar</a>
+                    <a href="{{ route('widyaiswara.index') }}" class="text-sm font-medium text-gray-500 hover:text-blue-600">Profil Widyaiswara</a>
                     <a href="#" class="text-sm font-medium text-gray-500 hover:text-blue-600">Statistik</a>
                 </nav>
             </div>
             <div class="relative">
                 @auth
-                    <div class="flex items-center gap-4">
-                        <span class="text-sm font-medium text-gray-700">Halo, {{ Auth::user()->name }}</span>
+                    <div class="user-menu">
+                        {{-- Tombol ini akan menampilkan nama pengguna yang login --}}
+                        <button class="user-menu-button" id="userMenuButton">
+                            {{ Auth::user()->name }}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <div class="dropdown-menu" id="dropdownMenu">
                         <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="header_link">Logout</button>
-                        </form>
+                                @csrf
+                                <button type="submit">Logout</button>
+                            </form>
+                        </div>
                     </div>
                 @endauth
-            </div>
-        </header>
+            </nav>
+        </div>
+    </header>
 
         <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
             @yield('content')
