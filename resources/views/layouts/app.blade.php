@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@yield('title', 'BPSDMD Jawa Tengah')</title>
+    <title>@yield('title', 'PAK Wi Online')</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
         --accent-color: #0056b3;
       }
       body {
-        font-family: "Inter", sans-serif;
+        font-family: "Poppins", sans-serif;
         background-color: var(--background-color);
         color: var(--text-primary);
       }
@@ -66,108 +66,106 @@
       .specialization_tag {
         @apply px-3 py-1 text-xs font-medium rounded-full bg-[var(--secondary-color)] text-[var(--text-secondary)];
       }
-      .user-menu {
-            position: relative;
-            margin-left: 1.5rem;
-        }
-        
-        .user-menu-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: var(--font-family);
-            font-size: 1rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-        }
-        
-        .user-menu-button svg {
-            margin-left: 0.5rem;
-            transition: transform 0.3s ease;
-        }
-                .dropdown-menu {
-            display: none; /* Sembunyi secara default */
-            position: absolute;
-            right: 0;
-            top: 100%;
-            margin-top: 0.5rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            width: 200px;
-            padding: 0.5rem 0;
-            z-index: 10;
-        }
-        
-        .dropdown-menu.show {
-            display: block;
-        }
-        
-        .dropdown-menu a, .dropdown-menu button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 0.75rem 1.5rem;
-            text-decoration: none;
-            color: var(--secondary-color);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        
-        .dropdown-menu a:hover, .dropdown-menu button:hover {
-            background-color: #f3f4f6; /* Warna latar belakang saat hover */
-        }
+      /* Style Baru untuk User Dropdown */
+      .user-menu-button { @apply inline-flex items-center gap-2 text-sm font-semibold text-gray-700; }
+      .dropdown-menu { 
+        @apply absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-out duration-100;
+        transform: scale(0.95);
+        opacity: 0;
+        display: none; /* Awalnya disembunyikan */
+      }
+      .dropdown-menu.show {
+        transform: scale(1);
+        opacity: 1;
+        display: block; /* Tampilkan saat class 'show' ditambahkan */
+      }
+      .dropdown-item { @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100; }
     </style>
 </head>
-<body class="bg-[var(--background-color)]">
+<body class="bg-gray-50">
     <div class="min-h-screen flex flex-col">
         
+        <!-- HEADER BARU DENGAN NAVIGASI LENGKAP DAN DROPDOWN -->
         <header class="header">
-            <div class="flex items-center gap-8">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                    <svg class="w-8 h-8 text-[var(--primary-color)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" fill="currentColor"></path></svg>
-                    <h1 class="text-xl font-bold text-[var(--text-primary)]">BPSDMD App</h1>
-                </a>
-                <nav class="hidden md:flex items-center gap-6">
-                    <a href="{{ route('dashboard') }}" class="text-sm font-medium text-gray-500 hover:text-blue-600">Dashboard</a>
-                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-blue-600">Info Ajar</a>
-                    <a href="{{ route('widyaiswara.index') }}" class="text-sm font-medium text-gray-500 hover:text-blue-600">Profil Widyaiswara</a>
-                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-blue-600">Statistik</a>
-                </nav>
-            </div>
-            <div class="relative">
-                @auth
-                    <div class="user-menu">
-                        {{-- Tombol ini akan menampilkan nama pengguna yang login --}}
-                        <button class="user-menu-button" id="userMenuButton">
-                            {{ Auth::user()->name }}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
+            <!-- Kiri: Logo -->
+            <a href="{{ route('home') }}" class="flex items-center gap-3">
+                <h1 class="text-xl font-bold text-[var(--text-primary)] hidden sm:block">PAK Wi Online</h1>
+            </a>
 
+            <!-- Tengah: Menu Navigasi Utama -->
+            <nav class="flex items-center gap-6 text-sm font-medium">
+                <a href="{{ route('info.ajar') }}" class="text-gray-600 hover:text-blue-600">INFO AJAR</a>
+                <a href="{{ route('Profil.Widyaiswara') }}" class="text-gray-600 hover:text-blue-600">PROFIL WIDYAISWARA</a>
+                <a href="{{ route('statistik') }}" class="text-gray-600 hover:text-blue-600">STATISTIK</a>
+            </nav>
+            
+            <!-- Kanan: Tombol Login/Register atau Dropdown User -->
+            <div class="relative">
+                @guest
+                    {{-- Jika tamu, tampilkan Login & Register --}}
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700">Login</a>
+                        <a href="{{ route('register') }}" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">Register</a>
+                    </div>
+                @endguest
+
+                @auth
+                    {{-- Jika sudah login, tampilkan dropdown menu --}}
+                    <div class="user-menu">
+                        <button class="user-menu-button" id="userMenuButton">
+                            <span>{{ Auth::user()->name }}</span>
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" /></svg>
+                        </button>
+                        
                         <div class="dropdown-menu" id="dropdownMenu">
-                        <form method="POST" action="{{ route('logout') }}">
+                            @if (Auth::user()->role === 'admin')
+                                <a href="{{ route('admin.dashboard') }}" class="dropdown-item">Ke Dashboard</a>
+                            @else
+                                <a href="{{ route('dashboard') }}" class="dropdown-item">Ke Dashboard</a>
+                            @endif
+                            
+                            <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit">Logout</button>
+                                <button type="submit" class="dropdown-item">Logout</button>
                             </form>
                         </div>
                     </div>
                 @endauth
-            </nav>
-        </div>
-    </header>
+            </div>
+        </header>
 
-        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- KONTEN UTAMA -->
+        <main class="flex-grow w-full">
             @yield('content')
         </main>
 
-        <footer class="text-center py-4 text-sm text-gray-500 border-t bg-white">
-            © {{ date('Y') }} BPSDMD Provinsi Jawa Tengah. All rights reserved.
-        </footer>
     </div>
+
+    <!-- JAVASCRIPT UNTUK DROPDOWN -->
+    @auth
+    <script>
+        // Script ini hanya akan dimuat jika pengguna sudah login
+        document.addEventListener('DOMContentLoaded', function () {
+            const userMenuButton = document.getElementById('userMenuButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+
+            userMenuButton.addEventListener('click', function (event) {
+                // Mencegah event 'click' menyebar ke window
+                event.stopPropagation(); 
+                // Toggle class 'show' untuk menampilkan atau menyembunyikan dropdown
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Menutup dropdown jika pengguna mengklik di luar area dropdown
+            window.addEventListener('click', function (event) {
+                if (!dropdownMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
+                    if (dropdownMenu.classList.contains('show')) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                }
+            });
+        });
+    </script>
+    @endauth
 </body>
 </html>

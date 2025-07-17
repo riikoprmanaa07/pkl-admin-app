@@ -13,25 +13,22 @@ class WidyaiswaraController extends Controller
         // Data profil Widyaiswara yang akan ditampilkan
         $profiles = [
             [
-                'photo' => 'https://placehold.co/128x128/0056b3/FFFFFF?text=A',
+                'photo' => 'https://placehold.co/128x128/0056b3/FFFFFF?text=M',
                 'name' => '	Dra. MUKAROMAH SYAKOER, M.M.',
                 'nip' => '196102171985032008',
                 'rank' => 'Pembina Utama Madya (IV/d)',
-                'specializations' => ['Kepemimpinan', 'Manajemen Strategis']
             ],
             [
-                'photo' => 'https://placehold.co/128x128/343a40/FFFFFF?text=B',
-                'name' => 'Prof. Dr. Budi Santoso, M.Pd.',
-                'nip' => '196802201992031002',
+                'photo' => 'https://placehold.co/128x128/343a40/FFFFFF?text=H',
+                'name' => 'HENDRI SANTOSA, SE, Ak, M.Si. CA.',
+                'nip' => '196112261983031001',
                 'rank' => 'Pembina Utama Madya (IV/d)',
-                'specializations' => ['Kebijakan Publik', 'Analisis Data']
             ],
             [
-                'photo' => 'https://placehold.co/128x128/6c757d/FFFFFF?text=C',
-                'name' => 'Ir. Citra Dewi, M.T.',
-                'nip' => '197205101996032001',
-                'rank' => 'Pembina Utama Muda (IV/c)',
-                'specializations' => ['Teknologi Informasi', 'E-Government']
+                'photo' => 'https://placehold.co/128x128/6c757d/FFFFFF?text=S',
+                'name' => 'Dr. Ir. SUPRIYANTO, M.Si.',
+                'nip' => '196205171991031004',
+                'rank' => '	Pembina Utama (IV/e)',
             ],
         ];
         // Mengembalikan view dengan data profil
