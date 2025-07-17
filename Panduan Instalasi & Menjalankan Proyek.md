@@ -59,12 +59,12 @@ Langkah C: Konfigurasi Lingkungan (.env)
 
     - Cari dan sesuaikan baris berikut dengan informasi database Anda:
 
-        DB_CONNECTION=mysql
-        DB_HOST=127.0.0.1
-        DB_PORT=3306
-        DB_DATABASE=pak_wi_online # <-- Sesuaikan nama database Anda
-        DB_USERNAME=root # <-- Sesuaikan username database Anda
-        DB_PASSWORD= # <-- Isi password database Anda (kosongkan jika tidak ada)
+DB_CONNECTION=mysq
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=pak_wi_online # <-- Sesuaikan nama database Anda
+DB_USERNAME=root # <-- Sesuaikan username database Anda
+DB_PASSWORD= # <-- Isi password database Anda (kosongkan jika tidak ada)
 
 Langkah D: Siapkan Database
 Perintah ini akan membuat semua tabel yang dibutuhkan di dalam database (migrate) dan mengisinya dengan data awal (seed), seperti akun admin dan user default.
