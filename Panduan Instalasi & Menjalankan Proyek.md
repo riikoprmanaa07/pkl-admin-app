@@ -2,7 +2,7 @@ Panduan Instalasi & Menjalankan Proyek
 
 Aplikasi ini dibangun menggunakan Laravel 12 dengan fitur-fitur sebagai berikut:
 
-    - Halaman utama publik (Beranda dan Direktori Profil).
+    - Halaman utama publik (PAK Wi Online, Info Ajar, Profil Widyaiswara, dan Statistik).
     - Sistem otentikasi (Login & Register).
     - Pembagian peran pengguna (admin dan user).
     - Dashboard privat untuk setiap peran setelah login.
@@ -10,11 +10,11 @@ Aplikasi ini dibangun menggunakan Laravel 12 dengan fitur-fitur sebagai berikut:
 1.  Prasyarat Sistem ⚙️
     Sebelum memulai, pastikan perangkat Anda telah terinstal perangkat lunak berikut:
 
-        - PHP (versi 8.2 atau lebih baru)
-        - Composer (Manajer paket untuk PHP)
-        - Node.js & NPM (Manajer paket untuk JavaScript)
-        - Git (Sistem kontrol versi)
-        - Server Database (misalnya MySQL atau MariaDB)
+    -   PHP (versi 8.2 atau lebih baru)
+    -   Composer (Manajer paket untuk PHP)
+    -   Node.js & NPM (Manajer paket untuk JavaScript)
+    -   Git (Sistem kontrol versi)
+    -   Server Database (misalnya MySQL atau MariaDB)
 
 2.  Langkah-langkah Instalasi 🚀
     Silakan ikuti perintah-perintah di bawah ini secara berurutan di dalam terminal atau command prompt Anda.
@@ -94,9 +94,9 @@ http://127.0.0.1:8000
 4.  Akun untuk Pengujian 🔑
     Proyek ini sudah dilengkapi dengan data awal (seeder) untuk akun admin dan user. Anda bisa langsung mencoba login menggunakan kredensial berikut:
 
-        - ail: user@example.com
-        - Akun Admin:
-        - Email: admin@example.com
-        - Password: Bayuganteng11
+    -   ail: user@example.com
+    -   Akun Admin:
+    -   Email: admin@example.com
+    -   Password: Bayuganteng11
 
 Selamat, proyek Anda sekarang sudah siap untuk dijalankan dan diuji oleh siapa saja!
