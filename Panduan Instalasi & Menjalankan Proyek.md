@@ -22,50 +22,49 @@ Aplikasi ini dibangun menggunakan Laravel 12 dengan fitur-fitur sebagai berikut:
 Langkah A: Clone Repositori
 Salin (clone) semua file proyek dari repositori GitHub ke komputer Anda.
 
-# Ganti [URL_GITHUB_ANDA] dengan URL repositori GitHub proyek Anda
-
-git clone [URL_GITHUB_ANDA]
-
-# Masuk ke dalam folder proyek yang baru saja dibuat
-
-cd [NAMA_FOLDER_PROYEK]
+    # Gannti [URL_GITHUB_ANDA] dengan URL repositori GitHub proyek Anda
+      git clone [URL_GITHUB_ANDA]
+    # Masuk ke dalam folder proyek yang baru saja dibuat
+      cd [NAMA_FOLDER_PROYEK]
 
 Langkah B: Instal Dependensi (PHP & JavaScript)
-Instal dependensi PHP dengan Composer:
-Perintah ini akan mengunduh semua library yang dibutuhkan oleh Laravel.
 
-composer install
+1. Instal dependensi PHP dengan Composer:
+   Perintah ini akan mengunduh semua library yang dibutuhkan oleh Laravel.
 
-Instal dependensi JavaScript dengan NPM:
-Perintah ini akan mengunduh semua library frontend seperti Tailwind CSS.
+    composer install
 
-npm install
+2. Instal dependensi JavaScript dengan NPM:
+   Perintah ini akan mengunduh semua library frontend seperti Tailwind CSS.
+
+    npm install
 
 Langkah C: Konfigurasi Lingkungan (.env)
-Buat file .env:
-Salin file contoh .env.example menjadi file .env. File ini akan menyimpan semua konfigurasi rahasia Anda.
 
-cp .env.example .env
+1. Buat file .env:
+   Salin file contoh .env.example menjadi file .env. File ini akan menyimpan semua konfigurasi rahasia Anda.
 
-Buat Kunci Aplikasi (Application Key):
-Perintah ini wajib dijalankan untuk mengenkripsi semua data sensitif di aplikasi.
+    cp .env.example .env
 
-php artisan key:generate
+2. Buat Kunci Aplikasi (Application Key):
+   Perintah ini wajib dijalankan untuk mengenkripsi semua data sensitif di aplikasi.
 
-Konfigurasi Database:
+    php artisan key:generate
 
-Buat sebuah database baru di server database Anda (misalnya melalui phpMyAdmin) dengan nama pak_wi_online (atau nama lain yang Anda inginkan).
+3. Konfigurasi Database:
 
-Buka file .env yang baru saja Anda buat dengan teks editor.
+    - Buat sebuah database baru di server database Anda (misalnya melalui phpMyAdmin) dengan nama pak_wi_online (atau nama lain yang Anda inginkan).
 
-Cari dan sesuaikan baris berikut dengan informasi database Anda:
+    - Buka file .env yang baru saja Anda buat dengan teks editor.
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=pak_wi_online # <-- Sesuaikan nama database Anda
-DB_USERNAME=root # <-- Sesuaikan username database Anda
-DB_PASSWORD= # <-- Isi password database Anda (kosongkan jika tidak ada)
+    - Cari dan sesuaikan baris berikut dengan informasi database Anda:
+
+        DB_CONNECTION=mysql
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_DATABASE=pak_wi_online # <-- Sesuaikan nama database Anda
+        DB_USERNAME=root # <-- Sesuaikan username database Anda
+        DB_PASSWORD= # <-- Isi password database Anda (kosongkan jika tidak ada)
 
 Langkah D: Siapkan Database
 Perintah ini akan membuat semua tabel yang dibutuhkan di dalam database (migrate) dan mengisinya dengan data awal (seed), seperti akun admin dan user default.
