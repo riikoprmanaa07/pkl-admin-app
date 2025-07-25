@@ -72,14 +72,47 @@
         @apply absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-out duration-100;
         transform: scale(0.95);
         opacity: 0;
-        display: none; /* Awalnya disembunyikan */
+        display: none;
       }
       .dropdown-menu.show {
         transform: scale(1);
         opacity: 1;
-        display: block; /* Tampilkan saat class 'show' ditambahkan */
+        display: block;
       }
       .dropdown-item { @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100; }
+      .modal-overlay {
+        @apply fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50;
+        display: none; opacity: 0; transition: opacity 0.3s ease-in-out;
+      }
+      .modal-overlay.show {
+        display: flex; opacity: 1;
+      }
+      .modal-content {
+        @apply bg-white rounded-lg shadow-2xl w-full max-w-4xl flex flex-col;
+        @apply transform transition-transform duration-300;
+        transform: translateY(20px);
+        max-height: 90vh; /* Batasi tinggi maksimal pop-up */
+      }
+      .modal-overlay.show .modal-content {
+          transform: translateY(0);
+      }
+      .modal-header {
+          @apply p-4 border-b flex justify-between items-center;
+      }
+      .modal-body {
+          @apply p-6 overflow-y-auto; /* INI KUNCI UNTUK FITUR SCROLL */
+      }
+      .modal-close-button {
+        @apply text-gray-400 hover:text-gray-700;
+      }
+      .info-table td { @apply py-3 px-4; }
+      .info-table tr:not(:last-child) td { @apply border-b border-gray-200; }
+      .info-table td:first-child { @apply font-semibold text-gray-600 w-1/4; }
+      .kompetensi-table { @apply w-full text-sm text-left text-gray-500; }
+      .kompetensi-table th { @apply px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider; }
+      .kompetensi-table td { @apply px-6 py-4; }
+      .kompetensi-table tbody tr:nth-child(odd) { @apply bg-white; }
+      .kompetensi-table tbody tr:nth-child(even) { @apply bg-gray-50; }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -167,5 +200,8 @@
         });
     </script>
     @endauth
+
+    @yield('footer-scripts')
+    
 </body>
 </html>
