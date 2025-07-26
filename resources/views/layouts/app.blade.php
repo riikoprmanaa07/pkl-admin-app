@@ -66,6 +66,7 @@
       .specialization_tag {
         @apply px-3 py-1 text-xs font-medium rounded-full bg-[var(--secondary-color)] text-[var(--text-secondary)];
       }
+      
       /* Style Baru untuk User Dropdown */
       .user-menu-button { @apply inline-flex items-center gap-2 text-sm font-semibold text-gray-700; }
       .dropdown-menu { 
@@ -80,6 +81,8 @@
         display: block;
       }
       .dropdown-item { @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100; }
+      
+      /* Modal Styles */
       .modal-overlay {
         @apply fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50;
         display: none; opacity: 0; transition: opacity 0.3s ease-in-out;
