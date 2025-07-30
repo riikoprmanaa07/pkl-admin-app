@@ -10,7 +10,7 @@
         <section class="text-center">
             <h2 class="text-4xl font-bold text-[var(--text-primary)] mb-2">Profil Widyaiswara</h2>
             <p class="text-[var(--text-secondary)] max-w-2xl mx-auto">
-                Temukan ahli dan spesialis terbaik dari BPSDMD Provinsi Jawa Tengah untuk kebutuhan pelatihan dan pengembangan Anda.
+                Temukan ahli dan spesialis terbaik untuk kebutuhan pelatihan dan pengembangan Anda.
             </p>
         </section>
 
@@ -19,34 +19,41 @@
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                     <svg aria-hidden="true" class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" fill-rule="evenodd"></path></svg>
                 </div>
-                <input class="search_bar" placeholder="Pencarian" type="search" />
+                <input
+                id="searchBar"
+                class="search_bar"
+                placeholder="Cari berdasarkan nama atau jabatan..."
+                type="search"
+                />
             </div>
             <div class="flex flex-wrap gap-3 mt-4 justify-center">
-                <button class="filter_button_active">Semua</button>
-                <button class="filter_button">Widyaiswara Ahli Utama</button>
-                <button class="filter_button">Widyaiswara Ahli Madya</button>
-                <button class="filter_button">Widyaiswara Ahli Muda</button>
-                <button class="filter_button">Widyaiswara Ahli Pertama</button>
+                <button class="filter-button filter_button_active" data-filter="*">Semua</button>
+                @foreach ($jabatans as $jabatan)
+                            <button class="filter-button filter_button" data-filter="{{ $jabatan }}">
+                        {{ $jabatan }}
+                    </button>
+                @endforeach
             </div>
         </section>
 
-        <section class="profile_grid mt-12">
+                <section class="profile_grid mt-12">
             @foreach ($profiles as $profile)
             <div 
                 class="profile_card cursor-pointer open-modal-button"
+                {{-- == PERBAIKAN 1: Merapikan Atribut data-jabatan == --}}
+                data-jabatan="{{ $profile['jabatan_singkat'] }}"   {{-- Digunakan oleh Filter & Search --}}
+                data-jabatan-lengkap="{{ $profile['jabatan_lengkap'] }}" {{-- Digunakan oleh Pop-up --}}
+
                 data-photo="{{ $profile['photo'] }}"
                 data-name="{{ $profile['name'] }}"
-                data-jabatan="{{ $profile['jabatan_lengkap'] }}"
                 data-nip="{{ $profile['nip'] }}"
-                data-rank="{{ $profile['rank'] }}"
+                data-rank="{{ $profile['rank'] }}"  
                 data-penempatan="{{ $profile['penempatan'] }}"
                 data-kompetensi="{{ json_encode($profile['kompetensi']) }}"
             >
-                <img alt="Foto {{ $profile['name'] }}" class="profile_photo" src="{{ $profile['photo'] }}" onerror="this.onerror=null;this.src='https://placehold.co/128x128/EBF4FF/7F9CF5?text=Photo';" />
+                <div class="profile_photo" style="background: url('{{ $profile['photo'] }}') lightgray 0px -1px / 100% 150% no-repeat;"></div>
                 <h3 class="profile_name">{{ $profile['name'] }}</h3>
-                <p class="profile_metadata">
-                    {{ $profile['jabatan_singkat'] }}
-                </p>
+                <p class="profile_metadata">{{ $profile['jabatan_singkat'] }}</p>
             </div>
             @endforeach
         </section>
@@ -66,14 +73,15 @@
 
         <!-- 2. Modal Body (Bagian yang bisa di-scroll) -->
         <div class="modal-body">
-            <div class="flex flex-col md:flex-row gap-6">
+            <div class="flex flex-col md:flex-row gap-8 items-start">
                 <!-- Kolom Kiri: Foto -->
-                <div class="md:w-1/3 flex-shrink-0 text-center">
-                    <img id="modalPhoto" src="" alt="Foto Profil" class="w-full h-auto rounded-lg object-cover shadow-md">
+                <div class="w-full md:w-56 flex-shrink-0">
+                    <div id="modalPhotoContainer" class="modal_photo_container">
+                    </div>
                 </div>
 
                 <!-- Kolom Kanan: Informasi Detail -->
-                <div class="md:w-2/3">
+                <div class="flex-grow">
                     <table class="w-full text-left info-table">
                         <tbody>
                             <tr><td>Nama</td><td id="modalName"></td></tr>
@@ -114,13 +122,13 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // 1. Ambil semua elemen yang kita butuhkan
+
+    // == BAGIAN 1: DEKLARASI SEMUA VARIABEL DI SATU TEMPAT ==
+
+    // Variabel untuk Pop-up
     const modal = document.getElementById('profileModal');
     const closeModalButton = document.getElementById('closeModalButton');
-    const profileCards = document.querySelectorAll('.open-modal-button');
-
-    // Elemen di dalam modal yang akan diisi data
-    const modalPhoto = document.getElementById('modalPhoto');
+    const modalPhotoContainer = document.getElementById('modalPhotoContainer');
     const modalName = document.getElementById('modalName');
     const modalJabatan = document.getElementById('modalJabatan');
     const modalNip = document.getElementById('modalNip');
@@ -128,58 +136,84 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalPenempatan = document.getElementById('modalPenempatan');
     const modalKompetensiBody = document.getElementById('modalKompetensiBody');
 
-    // 2. Tambahkan event listener untuk setiap kartu profil
+    // Variabel untuk Filter & Search
+    const filterButtons = document.querySelectorAll('.filter-button');
+    const searchBar = document.getElementById('searchBar');
+    
+    // == PERBAIKAN 2: Deklarasi profileCards HANYA SATU KALI ==
+    const profileCards = document.querySelectorAll('.profile_card');
+
+    // Variabel untuk menyimpan kondisi filter
+    let activeFilter = '*';
+    let searchTerm = '';
+
+    // == BAGIAN 2: LOGIKA UNTUK FITUR POP-UP ==
     profileCards.forEach(card => {
         card.addEventListener('click', function () {
-            // 3. Ambil data dari atribut data-* kartu yang diklik
-            modalPhoto.src = this.dataset.photo;
+            const photoUrl = this.dataset.photo;
+            const kompetensi = JSON.parse(this.dataset.kompetensi);
+
+            modalPhotoContainer.style.backgroundImage = `url('${photoUrl}')`;
             modalName.textContent = this.dataset.name;
-            modalJabatan.textContent = this.dataset.jabatan;
+            modalJabatan.textContent = this.dataset.jabatanLengkap; // Menggunakan data jabatan lengkap
             modalNip.textContent = this.dataset.nip;
             modalRank.textContent = this.dataset.rank;
             modalPenempatan.textContent = this.dataset.penempatan;
-            const kompetensi = JSON.parse(this.dataset.kompetensi);
 
-            // 4. Bangun tabel kompetensi secara dinamis
-            // Kosongkan dulu isi tabel sebelumnya
             modalKompetensiBody.innerHTML = ''; 
-            
             if (kompetensi.length > 0) {
                 kompetensi.forEach((item, index) => {
-                    // Buat baris baru (tr) untuk setiap item
                     const row = document.createElement('tr');
-                    // Isi baris dengan data
-                    row.innerHTML = `
-                        <td class="px-6 py-4 font-medium text-gray-900">${index + 1}</td>
-                        <td class="px-6 py-4">${item.materi}</td>
-                        <td class="px-6 py-4">${item.jenis_diklat}</td>
-                    `;
-                    // Tambahkan baris ke dalam body tabel
+                    row.innerHTML = `<td class="px-6 py-4 font-medium text-gray-900">${index + 1}</td><td class="px-6 py-4">${item.materi}</td><td class="px-6 py-4">${item.jenis_diklat}</td>`;
                     modalKompetensiBody.appendChild(row);
                 });
             } else {
-                // Jika tidak ada data kompetensi
                 const row = document.createElement('tr');
                 row.innerHTML = `<td colspan="3" class="text-center py-4">Tidak ada data kompetensi.</td>`;
                 modalKompetensiBody.appendChild(row);
             }
-
-            // 5. Tampilkan modal
             modal.classList.add('show');
         });
     });
 
-    // Fungsi untuk menutup modal
     function closeModal() {
-        modal.classList.remove('show');
+        if(modal) modal.classList.remove('show');
     }
 
-    closeModalButton.addEventListener('click', closeModal);
-    modal.addEventListener('click', function (event) {
-        if (event.target === modal) {
-            closeModal();
-        }
+    if(closeModalButton) closeModalButton.addEventListener('click', closeModal);
+    if(modal) modal.addEventListener('click', function (event) {
+        if (event.target === modal) closeModal();
+    });
+
+    // == BAGIAN 3: LOGIKA UNTUK FITUR FILTER & PENCARIAN ==
+    function runFilterAndSearch() {
+        profileCards.forEach(card => {
+            const cardJabatan = card.dataset.jabatan;
+            const cardName = card.querySelector('.profile_name').textContent.toLowerCase();
+            
+            const categoryMatch = (activeFilter === '*' || cardJabatan === activeFilter);
+            const searchMatch = (cardName.includes(searchTerm) || cardJabatan.toLowerCase().includes(searchTerm));
+
+            if (categoryMatch && searchMatch) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            activeFilter = this.dataset.filter;
+            filterButtons.forEach(btn => btn.classList.replace('filter_button_active', 'filter_button'));
+            this.classList.replace('filter_button', 'filter_button_active');
+            runFilterAndSearch();
+        });
+    });
+
+    searchBar.addEventListener('input', function() {
+        searchTerm = this.value.toLowerCase().trim();
+        runFilterAndSearch();
     });
 });
 </script>
-

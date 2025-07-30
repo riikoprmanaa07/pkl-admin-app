@@ -24,6 +24,8 @@
         background-color: var(--background-color);
         color: var(--text-primary);
       }
+
+      /* Header Styles */
       .header {
         @apply sticky top-0 bg-white shadow-md py-4 px-6 md:px-10 flex justify-between items-center z-10;
       }
@@ -33,18 +35,26 @@
       .header_link {
         @apply text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--primary-color)] transition-colors;
       }
+
+      /* Konten Utama */
       .headline {
         @apply text-4xl font-bold text-[var(--text-primary)] mt-8 mb-4 text-center;
       }
+
+      /* Search Bar Styles */
       .search_bar {
         @apply w-full p-4 pl-12 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent;
       }
+
+      /* Filter Button Styles */
       .filter_button {
         @apply px-4 py-2 text-sm font-medium rounded-full bg-white border border-gray-300 text-[var(--text-secondary)] hover:bg-gray-100 transition-colors;
       }
       .filter_button_active {
         @apply px-4 py-2 text-sm font-medium rounded-full bg-[var(--accent-color)] text-white border border-transparent;
       }
+
+      /* Profil Card Styles */
       .profile_grid {
         @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8;
       }
@@ -52,7 +62,7 @@
         @apply bg-white rounded-lg shadow-md p-6 flex flex-col items-center text-center transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl;
       }
       .profile_photo {
-        @apply w-32 h-32 rounded-full object-cover mb-4 border-4 border-white shadow-lg;
+      @apply w-32 h-32 rounded-full mb-4 border-4 border-white shadow-lg;
       }
       .profile_name {
         @apply text-xl font-bold text-[var(--text-primary)] mb-1;
@@ -60,12 +70,7 @@
       .profile_metadata {
         @apply text-sm text-[var(--text-secondary)] mb-3;
       }
-      .profile_specialization {
-        @apply flex flex-wrap gap-2 mt-2 justify-center;
-      }
-      .specialization_tag {
-        @apply px-3 py-1 text-xs font-medium rounded-full bg-[var(--secondary-color)] text-[var(--text-secondary)];
-      }
+      
       /* Style Baru untuk User Dropdown */
       .user-menu-button { @apply inline-flex items-center gap-2 text-sm font-semibold text-gray-700; }
       .dropdown-menu { 
@@ -80,6 +85,8 @@
         display: block;
       }
       .dropdown-item { @apply block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100; }
+      
+      /* Modal Styles */
       .modal-overlay {
         @apply fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50;
         display: none; opacity: 0; transition: opacity 0.3s ease-in-out;
@@ -91,9 +98,9 @@
         @apply bg-white rounded-lg shadow-2xl w-full max-w-4xl flex flex-col;
         @apply transform transition-transform duration-300;
         transform: translateY(20px);
-        max-height: 90vh; /* Batasi tinggi maksimal pop-up */
+        max-height: 90vh;
       }
-      .modal-overlay.show .modal-content {
+      .modal-overlay.show.modal-content {
           transform: translateY(0);
       }
       .modal-header {
@@ -105,6 +112,8 @@
       .modal-close-button {
         @apply text-gray-400 hover:text-gray-700;
       }
+
+      /* Tabel Info dan Kompetensi */
       .info-table td { @apply py-3 px-4; }
       .info-table tr:not(:last-child) td { @apply border-b border-gray-200; }
       .info-table td:first-child { @apply font-semibold text-gray-600 w-1/4; }
@@ -113,6 +122,15 @@
       .kompetensi-table td { @apply px-6 py-4; }
       .kompetensi-table tbody tr:nth-child(odd) { @apply bg-white; }
       .kompetensi-table tbody tr:nth-child(even) { @apply bg-gray-50; }
+
+      /* Modal Photo Container */
+      .modal_photo_container {
+        @apply w-full bg-gray-200 rounded-lg shadow-inner;
+        aspect-ratio: 1 / 1;
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+      }
     </style>
 </head>
 <body class="bg-gray-50">
