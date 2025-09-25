@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User; // <-- Pastikan baris ini ada
-use Illuminate\Support\Facades\Hash; // <-- Pastikan baris ini juga ada
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
@@ -14,13 +14,17 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Di sini kita memanggil User::create() DAN memberikan
-        // array yang berisi semua data yang diperlukan.
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'role' => 'admin',
-            'password' => Hash::make('Bayuganteng11'), // Ganti 'password123' dengan password pilihan Anda
-        ]);
+        // Mencari user dengan email admin, jika sudah ada, tidak akan dibuat lagi.
+        User::firstOrCreate(
+            ['email' => 'admin@example.com'], // Kunci untuk mencari
+            [
+                'name' => 'Admin',
+                // PERBAIKAN: Menambahkan NIP untuk user admin agar sesuai aturan database.
+                'nip' => '000000000000000000', 
+                'role' => 'admin',
+                'password' => Hash::make('password'), // Ganti 'password' dengan password yang aman
+            ]
+        );
     }
 }
+

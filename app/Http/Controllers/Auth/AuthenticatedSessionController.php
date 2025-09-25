@@ -12,6 +12,7 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+
     /**
      * Menampilkan halaman login.
      *
@@ -27,30 +28,36 @@ class AuthenticatedSessionController extends Controller
     /**
      * Menangani permintaan autentikasi yang masuk.
      *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
-        // 1. Lakukan autentikasi pada kredensial pengguna.
-        // Metode ini akan otomatis melempar ValidationException jika gagal.
-        $request->authenticate();
+        // 1. Validasi input nip dan password
+        $request->validate([
+            'nip' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
 
-        // 2. Buat ulang ID sesi untuk mencegah serangan session fixation.
-        $request->session()->regenerate();
+        // 2. Coba autentikasi menggunakan nip dan password
+        if (Auth::attempt($request->only('nip', 'password'), $request->boolean('remember'))) {
+            // Jika autentikasi berhasil
+            $request->session()->regenerate();
 
-        // 3. **Logika Pengalihan Kustom (Custom Redirect Logic)**
-        // Periksa apakah pengguna yang baru saja login memiliki peran 'admin'.
-        if ($request->user()->role === 'admin') {
-            // Jika pengguna adalah admin, arahkan ke dashboard admin.
-            return redirect()->route('admin.dashboard');
+            // 3. Pengalihan (redirect) berdasarkan role
+            if (Auth::user()->role === 'admin') {
+                return redirect()->intended('/admin/jam-mengajar/create'); // halaman admin
+            } else {
+                return redirect()->intended('/dashboard'); // halaman user biasa
+            }
         }
 
-        // 4. Untuk semua pengguna lain, arahkan mereka ke tujuan yang diinginkan sebelumnya,
-        // atau ke rute HOME default jika tidak ada.
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // 4. Jika login gagal, kembali ke halaman login dengan error
+        return back()->withErrors([
+            'nip' => 'NIP atau password salah.',
+        ])->withInput();
     }
-
+    
     /**
      * Hancurkan sesi yang terautentikasi (logout).
      *

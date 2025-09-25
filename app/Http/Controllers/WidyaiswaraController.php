@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\View\View; // Impor kelas View
+use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class WidyaiswaraController extends Controller
 {
@@ -7723,7 +7724,6 @@ class WidyaiswaraController extends Controller
                 ]
             ],
             
-            
         ];
         $jabatans = array_column($profiles, 'jabatan_singkat');
         $uniqueJabatans = array_unique($jabatans);
@@ -7733,5 +7733,7 @@ class WidyaiswaraController extends Controller
             'profiles' => $profiles,
             'jabatans' => $uniqueJabatans
         ]);
+
+        
     }
 }

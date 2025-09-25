@@ -100,7 +100,7 @@
         transform: translateY(20px);
         max-height: 90vh;
       }
-      .modal-overlay.show.modal-content {
+      .modal-overlay.show .modal-content {
           transform: translateY(0);
       }
       .modal-header {
@@ -132,6 +132,7 @@
         background-repeat: no-repeat;
       }
     </style>
+    @stack('styles')
 </head>
 <body class="bg-gray-50">
     <div class="min-h-screen flex flex-col">
@@ -146,8 +147,17 @@
             <!-- Tengah: Menu Navigasi Utama -->
             <nav class="flex items-center gap-6 text-sm font-medium">
                 <a href="{{ route('info.ajar') }}" class="text-gray-600 hover:text-blue-600">INFO AJAR</a>
-                <a href="{{ route('Profil.Widyaiswara') }}" class="text-gray-600 hover:text-blue-600">PROFIL WIDYAISWARA</a>
+                
+                {{-- === PERBAIKAN DI SINI === --}}
+                {{-- Nama rute diubah dari 'Profil.Widyaiswara' menjadi 'profil.widyaiswara' --}}
+                <a href="{{ route('profil.widyaiswara') }}" class="text-gray-600 hover:text-blue-600">PROFIL WIDYAISWARA</a>
+                
                 <a href="{{ route('statistik') }}" class="text-gray-600 hover:text-blue-600">STATISTIK</a>
+                
+                {{-- Link ke formulir sekarang menunjuk ke rute admin yang benar --}}
+                @can('admin') {{-- Pastikan Anda memiliki Gate 'admin' agar link ini hanya muncul untuk admin --}}
+                    <a href="{{ route('admin.jam-mengajar.create') }}" class="text-gray-600 hover:text-blue-600">FORMULIR</a>
+                @endcan
             </nav>
             
             <!-- Kanan: Tombol Login/Register atau Dropdown User -->
@@ -155,8 +165,7 @@
                 @guest
                     {{-- Jika tamu, tampilkan Login & Register --}}
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700">Login</a>
-                        <a href="{{ route('register') }}" class="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">Register</a>
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-500">Login</a>
                     </div>
                 @endguest
 
@@ -195,21 +204,19 @@
     <!-- JAVASCRIPT UNTUK DROPDOWN -->
     @auth
     <script>
-        // Script ini hanya akan dimuat jika pengguna sudah login
         document.addEventListener('DOMContentLoaded', function () {
             const userMenuButton = document.getElementById('userMenuButton');
             const dropdownMenu = document.getElementById('dropdownMenu');
 
-            userMenuButton.addEventListener('click', function (event) {
-                // Mencegah event 'click' menyebar ke window
-                event.stopPropagation(); 
-                // Toggle class 'show' untuk menampilkan atau menyembunyikan dropdown
-                dropdownMenu.classList.toggle('show');
-            });
+            if (userMenuButton) {
+                userMenuButton.addEventListener('click', function (event) {
+                    event.stopPropagation(); 
+                    dropdownMenu.classList.toggle('show');
+                });
+            }
 
-            // Menutup dropdown jika pengguna mengklik di luar area dropdown
             window.addEventListener('click', function (event) {
-                if (!dropdownMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
+                if (dropdownMenu && userMenuButton && !dropdownMenu.contains(event.target) && !userMenuButton.contains(event.target)) {
                     if (dropdownMenu.classList.contains('show')) {
                         dropdownMenu.classList.remove('show');
                     }

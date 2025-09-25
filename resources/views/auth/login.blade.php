@@ -21,6 +21,7 @@
         .link { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: #6b7280; }
         .link a { color: #3b82f6; text-decoration: none; font-weight: 600; }
         .link a:hover { text-decoration: underline; }
+        .alert { background-color: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center; }
         
         /* Gaya untuk Fitur Gemini */
         .gemini-feature { text-align: center; margin-top: 2rem; border-top: 1px solid #e5e7eb; padding-top: 1.5rem; }
@@ -36,14 +37,23 @@
 </head>
 <body>
     <div class="card">
-        <h2>Selamat Datang Kembali!</h2>
+        <h2>Selamat Datang</h2>
         <p class="subtitle">Masuk untuk melanjutkan ke dasbor Anda.</p>
+
+        {{-- Ini adalah bagian penting untuk menampilkan pesan kesalahan dari controller --}}
+        @if ($errors->any())
+            <div class="alert">
+                {{ $errors->first('nip') }}
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="form-group">
-                <label for="email">Alamat Email</label>
-                <input id="email" type="email" class="form-control" name="email" required autofocus>
+                <label for="nip">NIP</label>
+                <input id="nip" type="text" class="form-control" name="nip" value="{{ old('nip') }}" required autofocus>
             </div>
+
             <div class="form-group">
                 <label for="password">Password</label>
                 <div class="password-wrapper">
@@ -56,87 +66,20 @@
             <div class="form-group">
                 <button type="submit" class="btn">Login</button>
             </div>
-            <p class="link">Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></p>
         </form>
 
-        <!-- FITUR BARU: GEMINI SECURITY TIP -->
-        <div class="gemini-feature">
-            <button type="button" class="gemini-btn" id="securityTipBtn">
-                <span id="gemini-btn-text">✨ Beri saya Tips Keamanan</span>
-                <div id="gemini-loading" class="loading-spinner" style="display: none;"></div>
-            </button>
-            <p id="tip-display" class="tip-box"></p>
-        </div>
-    </div>
+        <script>
+            // --- Logika untuk Lihat/Sembunyikan Password (Tetap ada) ---
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('password');
 
-    <script>
-        // --- Logika untuk Lihat/Sembunyikan Password (Tetap ada) ---
-        const togglePassword = document.getElementById('togglePassword');
-        const password = document.getElementById('password');
-
-        togglePassword.addEventListener('click', function() {
-            const isPassword = password.type === 'password';
-            password.type = isPassword ? 'text' : 'password';
-            this.innerHTML = isPassword 
-                ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>` 
-                : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-        });
-
-        // --- Logika untuk Fitur Tips Keamanan Gemini ---
-        const tipBtn = document.getElementById('securityTipBtn');
-        const tipDisplay = document.getElementById('tip-display');
-        const tipBtnText = document.getElementById('gemini-btn-text');
-        const tipLoadingSpinner = document.getElementById('gemini-loading');
-
-        tipBtn.addEventListener('click', async () => {
-            // Tampilkan status loading
-            tipBtnText.textContent = 'Meminta tips...';
-            tipLoadingSpinner.style.display = 'block';
-            tipBtn.disabled = true;
-            tipDisplay.style.display = 'none';
-
-            const prompt = "Berikan satu tips keamanan akun online yang singkat, padat, dan mudah dipahami untuk pengguna umum. Fokus pada satu aksi spesifik. Contoh: 'Gunakan kombinasi password yang unik untuk setiap akun online Anda.' atau 'Aktifkan otentikasi dua faktor (2FA) di semua akun penting Anda.'";
-
-            try {
-                let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                const payload = { contents: chatHistory };
-                const apiKey = @json($geminiApiKey); // Kunci API akan disediakan oleh Canvas
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-
-                if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts) {
-                    const securityTip = result.candidates[0].content.parts[0].text.trim();
-                    tipDisplay.textContent = securityTip;
-                    tipDisplay.style.display = 'block';
-                } else {
-                    console.error('Struktur respons tidak terduga dari API Gemini:', result);
-                    tipDisplay.textContent = 'Gagal mendapatkan tips saat ini. Coba lagi nanti.';
-                    tipDisplay.style.display = 'block';
-                }
-
-            } catch (error) {
-                console.error('Error saat memanggil Gemini API:', error);
-                tipDisplay.textContent = 'Terjadi kesalahan saat meminta tips. Periksa koneksi Anda.';
-                tipDisplay.style.display = 'block';
-            } finally {
-                // Kembalikan tombol ke keadaan semula
-                tipBtnText.textContent = '✨ Beri saya Tips Keamanan';
-                tipLoadingSpinner.style.display = 'none';
-                tipBtn.disabled = false;
-            }
-        });
-    </script>
-</body>
+            togglePassword.addEventListener('click', function() {
+                const isPassword = password.type === 'password';
+                password.type = isPassword ? 'text' : 'password';
+                this.innerHTML = isPassword 
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path><line x1="2" x2="22" y1="2" y2="22"></line></svg>` 
+                    : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            });
+        </script>
+    </body>
 </html>

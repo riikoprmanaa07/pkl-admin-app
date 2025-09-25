@@ -16,8 +16,11 @@ class DatabaseSeeder extends Seeder
     {
         // Baris ini memanggil Seeder spesifik yang telah kita buat untuk admin.
         // Ini adalah satu-satunya baris yang Anda perlukan di dalam method run().
-        $this->call([
+               $this->call([
             AdminUserSeeder::class,
+            WidyaiswaraSeeder::class, // Pastikan Anda memiliki seeder ini
+            KompetensiSeeder::class,  // Pastikan Anda memiliki seeder ini
+            CalendarSeeder::class,    // Ini yang berisi nama-nama diklat
         ]);
 
         // Catatan: Kode User::factory() bawaan Laravel bisa Anda hapus

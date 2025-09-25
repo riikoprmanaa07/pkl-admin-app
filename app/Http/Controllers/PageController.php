@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -29,6 +30,12 @@ class PageController extends Controller
     public function statistik(): View
     {
         return view('statistik');
+    }
+
+    // menampilkan halaman formulir
+    public function formulir(): View
+    {
+        return view('formulir');
     }
 
 }
